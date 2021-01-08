@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.ArrayList;
 
 public class Board {
 	private int[][] board;
@@ -9,6 +10,30 @@ public class Board {
 
 	public Board(int[][] board) {
 		this.board = board;
+	}
+
+	public ArrayList<Integer> possibleValues(int row, int col) {
+		int[] count = new int[10];
+		for(int i = 0; i < count.length; i++)
+			count[i] = 0;
+
+		for(int x : getRow(row))
+			if(x != 0)
+				count[x]++;
+		for(int x : getCol(col))
+			if(x != 0)
+				count[x]++;
+		for(int x : getBox(row, col))
+			if(x != 0)
+				count[x]++;
+
+		ArrayList<Integer> toReturn = new ArrayList<Integer>();
+		for(int i = 0; i < count.length; i++) {
+			if(count[i] == 0) {
+				toReturn.add(i);
+			}
+		}
+		return toReturn;
 	}
 
 	public boolean isValid() {
