@@ -6,6 +6,11 @@ public class Board {
 
 	public Board() {
 		this.board = new Tile[9][9];
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[0].length; c++) {
+				board[r][c] = new Tile(r,c);
+			}
+		}
 	}
 
 	public Board(Tile[][] board) {
@@ -16,6 +21,35 @@ public class Board {
 		//initialize board, insert initial values
 		//get all possible values for every empty square
 		//sort by number of possible values
+	}
+
+	//get all possible values for every empty square
+	public void initPossibleValues() {
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[0].length; c++) {
+				if(board[r][c].value != 0) {
+					board[r][c].setpossible(possibleValues(r, c));
+				}
+			}
+		}
+	}
+
+	public ArrayList<Tile> sortByNumPossible() {
+		//flatten 2D array
+		ArrayList<Tile> ref = new ArrayList<Tile>();
+		ArrayList<Integer> sizes = new ArrayList<Integer>();
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[0].length; c++) {
+				ref.add(board[r][c]);
+				sizes.add(board[r][c].getpossibleSize());
+			}
+		}
+		
+		//sort using... counting sort
+
+		
+
+		return null;
 	}
 
 	public ArrayList<Integer> possibleValues(int row, int col) {
@@ -75,7 +109,7 @@ public class Board {
 		int[] toret = new int[9];
 		
 		for(int i = 0; i < 9; i++) 
-			toret[i] = board[row][i].value();
+			toret[i] = board[row][i].value;
 
 		return toret;
 	}
@@ -84,7 +118,7 @@ public class Board {
 		int[] toret = new int[9];
 		
 		for(int i = 0; i < 9; i++) 
-			toret[i] = board[i][col].value();
+			toret[i] = board[i][col].value;
 
 		return toret;
 	}
@@ -96,7 +130,7 @@ public class Board {
 
 		for(int i = row/3; i < (row/3) + 3; i++) {
 			for(int j = col/3; j < (col/3) + 3; j++) {
-				toret[count] = board[i][j].value();
+				toret[count] = board[i][j].value;
 				count++;
 			}
 		}

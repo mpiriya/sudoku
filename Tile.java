@@ -1,9 +1,9 @@
 import java.util.ArrayList;
 
 public class Tile {
-	private int row;
-	private int col;
-	private int value;
+	private final int row;
+	private final int col;
+	public int value;
 	private ArrayList<Integer> possible;
 
 	public Tile(int row, int col) {
@@ -20,7 +20,7 @@ public class Tile {
 		return possible.size();
 	}
 
-	public int value() {
-		return value;
+	public void setpossible(ArrayList<Integer> possible) {
+		this.possible = possible;
 	}
 }
