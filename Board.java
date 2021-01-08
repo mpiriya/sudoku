@@ -2,14 +2,20 @@ import java.util.HashSet;
 import java.util.ArrayList;
 
 public class Board {
-	private int[][] board;
+	private Tile[][] board;
 
 	public Board() {
-		this.board = new int[9][9];
+		this.board = new Tile[9][9];
 	}
 
-	public Board(int[][] board) {
+	public Board(Tile[][] board) {
 		this.board = board;
+	}
+
+	public static void main(String[] args) {
+		//initialize board, insert initial values
+		//get all possible values for every empty square
+		//sort by number of possible values
 	}
 
 	public ArrayList<Integer> possibleValues(int row, int col) {
@@ -69,7 +75,7 @@ public class Board {
 		int[] toret = new int[9];
 		
 		for(int i = 0; i < 9; i++) 
-			toret[i] = board[row][i];
+			toret[i] = board[row][i].value();
 
 		return toret;
 	}
@@ -78,7 +84,7 @@ public class Board {
 		int[] toret = new int[9];
 		
 		for(int i = 0; i < 9; i++) 
-			toret[i] = board[i][col];
+			toret[i] = board[i][col].value();
 
 		return toret;
 	}
@@ -90,7 +96,7 @@ public class Board {
 
 		for(int i = row/3; i < (row/3) + 3; i++) {
 			for(int j = col/3; j < (col/3) + 3; j++) {
-				toret[count] = board[i][j];
+				toret[count] = board[i][j].value();
 				count++;
 			}
 		}
