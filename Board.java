@@ -46,10 +46,23 @@ public class Board {
 		}
 		
 		//sort using... counting sort
+		//citation: https://www.geeksforgeeks.org/counting-sort/
+		ArrayList<Tile> output = new ArrayList<Tile>();
+		int[] count = new int[10];
 
+		for(int i = 0; i < sizes.size(); i++) {
+			count[sizes.get(i)]++;
+		}
+
+		for(int i = 1; i < count.length; i++) {
+			count[i] += count[i-1];
+		}
 		
+		for(int i = sizes.size() - 1; i >= 0; i--) {
+			output.set(count[sizes.get(i)] - 1, ref.get(i));
+		}
 
-		return null;
+		return output;
 	}
 
 	public ArrayList<Integer> possibleValues(int row, int col) {
