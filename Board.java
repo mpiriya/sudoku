@@ -28,7 +28,7 @@ public class Board {
 				count[x]++;
 
 		ArrayList<Integer> toReturn = new ArrayList<Integer>();
-		for(int i = 0; i < count.length; i++) {
+		for(int i = 1; i < count.length; i++) {
 			if(count[i] == 0) {
 				toReturn.add(i);
 			}
@@ -88,9 +88,12 @@ public class Board {
 
 		int count = 0;
 
-		for(int i = row*3; i < (row*3) + 3; i++)
-			for(int j = col*3; j < (col*3) + 3; j++) 
-				toret[count++] = board[i][j];
+		for(int i = row/3; i < (row/3) + 3; i++) {
+			for(int j = col/3; j < (col/3) + 3; j++) {
+				toret[count] = board[i][j];
+				count++;
+			}
+		}
 
 		return toret;
 	}
