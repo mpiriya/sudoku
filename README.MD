@@ -9,3 +9,5 @@
 ## Todo:
 
 - recursively enter values into tiles with possible values of size 1, then update the remaining empty tiles
+
+- add GUI!
