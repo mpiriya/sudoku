@@ -29,10 +29,13 @@ public class Tile {
 	}
 
 	public String toString() {
-		String toret = "ROW: " + row + ", COL: " + col + ", VAL: " + value + "\n\t";
-		for(Integer i : possible)
-			toret += "" + i.intValue() + ", ";
-		toret += "\n";
+		String toret = "ROW: " + row + ", COL: " + col + ", VAL: " + value + "\n";
+		if(possible != null) {
+			toret += "\t";
+			for(Integer i : possible)
+				toret += "" + i.intValue() + ", ";
+			toret += "\n";
+		}
 		return toret;
 	}
 }

@@ -8,18 +8,20 @@ public class Board {
 		this.board = new Tile[9][9];
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				this.board[r][c] = new Tile(r,c);
+				this.board[r][c] = null;
 			}
 		}
 	}
 
 	public Board(int[][] board) {
-		this();
+		Tile[][] toSet = new Tile[9][9];
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				this.board[r][c].value = board[r][c];
+				toSet[r][c] = new Tile(r,c,board[r][c]);
 			}
 		}
+
+		this.board = toSet;
 	}
 
 	public static void main(String[] args) {
@@ -40,7 +42,7 @@ public class Board {
 						{0, 4, 0, 0, 7, 3, 0, 0, 6}
 					};
 
-		Board board = new Board();
+		Board board = new Board(vals);
 		System.out.println(board);
 		// board.initPossibleValues();
 
