@@ -8,46 +8,81 @@ public class Board {
 		this.board = new Tile[9][9];
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				board[r][c] = new Tile(r,c);
+				this.board[r][c] = new Tile(r,c);
 			}
 		}
 	}
 
-	public Board(Tile[][] board) {
-		this.board = board;
+	public Board(int[][] board) {
+		this();
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[0].length; c++) {
+				this.board[r][c].value = board[r][c];
+			}
+		}
 	}
 
 	public static void main(String[] args) {
 		//initialize board, insert initial values
 		//get all possible values for every empty square
 		//sort by number of possible values
+		//
+
+		int[][] vals = {
+						{6, 0, 0, 4, 5, 0, 0, 9, 0},
+						{1, 0, 0, 0, 0, 0, 0, 5, 0},
+						{0, 8, 0, 1, 9, 0, 0, 7, 0},
+						{4, 7, 0, 9, 3, 0, 1, 6, 8},
+						{0, 1, 0, 6, 0, 1, 0, 0, 0},
+						{9, 6, 1, 0, 2, 8, 0, 3, 4},
+						{0, 1, 0, 0, 6, 4, 0, 8, 0},
+						{0, 3, 0, 0, 0, 0, 0, 0, 7},
+						{0, 4, 0, 0, 7, 3, 0, 0, 6}
+					};
+
+		Board board = new Board();
+		System.out.println(board);
+		// board.initPossibleValues();
+
+		// for(Tile[] tarr : board.getboard()) {
+		// 	for(Tile t : tarr) {
+		// 		System.out.println(t == null ? "null" : t);
+		// 	}
+		// }
+
+		// Tile[] sorted = board.sortByNumPossible();
+		// for(Tile t : sorted) {
+		// 	System.out.println(t);
+		// }
 	}
 
 	//get all possible values for every empty square
 	public void initPossibleValues() {
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				if(board[r][c].value != 0) {
+				if(board[r][c].value == 0) {
 					board[r][c].setpossible(possibleValues(r, c));
 				}
 			}
 		}
 	}
 
-	public ArrayList<Tile> sortByNumPossible() {
+	public Tile[] sortByNumPossible() {
 		//flatten 2D array
 		ArrayList<Tile> ref = new ArrayList<Tile>();
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				ref.add(board[r][c]);
-				sizes.add(board[r][c].getpossibleSize());
+				if(board[r][c].getpossible() != null) {
+					ref.add(board[r][c]);
+					sizes.add(board[r][c].getpossibleSize());
+				}
 			}
 		}
 		
 		//sort using... counting sort
 		//citation: https://www.geeksforgeeks.org/counting-sort/
-		ArrayList<Tile> output = new ArrayList<Tile>();
+		Tile[] output = new Tile[sizes.size()];
 		int[] count = new int[10];
 
 		for(int i = 0; i < sizes.size(); i++) {
@@ -59,7 +94,7 @@ public class Board {
 		}
 		
 		for(int i = sizes.size() - 1; i >= 0; i--) {
-			output.set(count[sizes.get(i)] - 1, ref.get(i));
+			output[count[sizes.get(i)] - 1] = ref.get(i);
 		}
 
 		return output;
@@ -116,6 +151,10 @@ public class Board {
 		}
 
 		return false;
+	}
+
+	public Tile[][] getboard() {
+		return board;
 	}
 
 	public int[] getRow(int row) {

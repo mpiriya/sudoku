@@ -16,11 +16,23 @@ public class Tile {
 		this.value = value;
 	}
 
+	public ArrayList<Integer> getpossible() {
+		return possible;
+	}
+
 	public int getpossibleSize() {
 		return possible.size();
 	}
 
 	public void setpossible(ArrayList<Integer> possible) {
 		this.possible = possible;
+	}
+
+	public String toString() {
+		String toret = "ROW: " + row + ", COL: " + col + ", VAL: " + value + "\n\t";
+		for(Integer i : possible)
+			toret += "" + i.intValue() + ", ";
+		toret += "\n";
+		return toret;
 	}
 }
