@@ -16,12 +16,16 @@ public class Tile {
 		this.value = value;
 	}
 
-	public ArrayList<Integer> getpossible() {
-		return possible;
+	public int row() {
+		return row;
 	}
 
-	public int getpossibleSize() {
-		return possible.size();
+	public int col() {
+		return col;
+	}
+
+	public ArrayList<Integer> getpossible() {
+		return possible;
 	}
 
 	public void setpossible(ArrayList<Integer> possible) {
