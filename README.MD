@@ -6,8 +6,10 @@
 
 - sorts the tiles in order of ease to solve
 
+- recursively enter values into tiles with possible values of size 1, then update the remaining empty tiles
+
 ## Todo:
 
-- recursively enter values into tiles with possible values of size 1, then update the remaining empty tiles
+- implement DFS tree that handles when the min possible values is greater than 1
 
 - add GUI!
