@@ -35,7 +35,7 @@ public class Board {
 						{1, 0, 0, 0, 0, 0, 0, 5, 0},
 						{0, 8, 0, 1, 9, 0, 0, 7, 0},
 						{4, 7, 0, 9, 3, 0, 1, 6, 8},
-						{0, 1, 0, 6, 0, 1, 0, 0, 0},
+						{0, 0, 0, 6, 0, 1, 0, 0, 0},
 						{9, 6, 1, 0, 2, 8, 0, 3, 4},
 						{0, 1, 0, 0, 6, 4, 0, 8, 0},
 						{0, 3, 0, 0, 0, 0, 0, 0, 7},
@@ -43,19 +43,12 @@ public class Board {
 					};
 
 		Board board = new Board(vals);
-		System.out.println(board);
-		// board.initPossibleValues();
+		board.initPossibleValues();
 
-		// for(Tile[] tarr : board.getboard()) {
-		// 	for(Tile t : tarr) {
-		// 		System.out.println(t == null ? "null" : t);
-		// 	}
-		// }
-
-		// Tile[] sorted = board.sortByNumPossible();
-		// for(Tile t : sorted) {
-		// 	System.out.println(t);
-		// }
+		Tile[] sorted = board.sortByNumPossible();
+		for(Tile t : sorted) {
+			System.out.println(t);
+		}
 	}
 
 	//get all possible values for every empty square
@@ -97,6 +90,7 @@ public class Board {
 		
 		for(int i = sizes.size() - 1; i >= 0; i--) {
 			output[count[sizes.get(i)] - 1] = ref.get(i);
+			count[sizes.get(i)]--;
 		}
 
 		return output;
@@ -182,8 +176,8 @@ public class Board {
 
 		int count = 0;
 
-		for(int i = row/3; i < (row/3) + 3; i++) {
-			for(int j = col/3; j < (col/3) + 3; j++) {
+		for(int i = row/3*3; i < (row/3*3) + 3; i++) {
+			for(int j = col/3*3; j < (col/3*3) + 3; j++) {
 				toret[count] = board[i][j].value;
 				count++;
 			}
