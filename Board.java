@@ -14,14 +14,12 @@ public class Board {
 	}
 
 	public Board(int[][] board) {
-		Tile[][] toSet = new Tile[9][9];
+		this.board = new Tile[9][9];
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				toSet[r][c] = new Tile(r,c,board[r][c]);
+				this.board[r][c] = new Tile(r,c,board[r][c]);
 			}
 		}
-
-		this.board = toSet;
 	}
 
 	public static void main(String[] args) {
@@ -43,16 +41,25 @@ public class Board {
 					};
 
 		Board board = new Board(vals);
-		board.initPossibleValues();
+		board.setPossibleValues();
 
 		Tile[] sorted = board.sortByNumPossible();
-		for(Tile t : sorted) {
-			System.out.println(t);
+		// for(Tile t : sorted) {
+		// 	System.out.println(t);
+		// }
+
+		int numInserted = board.fill1PTiles(sorted);
+		while(numInserted != 0) {
+			sorted = board.sortByNumPossible();
+			numInserted = board.fill1PTiles(sorted);
+			System.out.println("HI");
 		}
+
+		System.out.println(board);
 	}
 
 	//get all possible values for every empty square
-	public void initPossibleValues() {
+	public void setPossibleValues() {
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
 				if(board[r][c].value == 0) {
@@ -68,9 +75,9 @@ public class Board {
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		for(int r = 0; r < board.length; r++) {
 			for(int c = 0; c < board[0].length; c++) {
-				if(board[r][c].getpossible() != null) {
+				if(board[r][c].getpossible() != null && board[r][c].getpossible().size() != 0) {
 					ref.add(board[r][c]);
-					sizes.add(board[r][c].getpossibleSize());
+					sizes.add(board[r][c].getpossible().size());
 				}
 			}
 		}
@@ -96,24 +103,42 @@ public class Board {
 		return output;
 	}
 
+	public int fill1PTiles(Tile[] sorted) {
+		int count = 0;
+
+		for(Tile t : sorted) {
+			if(t.getpossible().size() > 1) {
+				break;
+			}
+
+			int toRemove = t.getpossible().remove(0);
+			count++;
+			//sets the value of the tile to the only possible value at that tile
+			this.board[t.row()][t.col()].value = toRemove;
+		}
+		setPossibleValues();
+
+		return count;
+	}
+
 	public ArrayList<Integer> possibleValues(int row, int col) {
-		int[] count = new int[10];
+		boolean[] count = new boolean[10];
 		for(int i = 0; i < count.length; i++)
-			count[i] = 0;
+			count[i] = true;
 
 		for(int x : getRow(row))
 			if(x != 0)
-				count[x]++;
+				count[x] = false;
 		for(int x : getCol(col))
 			if(x != 0)
-				count[x]++;
+				count[x] = false;
 		for(int x : getBox(row, col))
 			if(x != 0)
-				count[x]++;
+				count[x] = false;
 
 		ArrayList<Integer> toReturn = new ArrayList<Integer>();
 		for(int i = 1; i < count.length; i++) {
-			if(count[i] == 0) {
+			if(count[i]) {
 				toReturn.add(i);
 			}
 		}
@@ -190,7 +215,7 @@ public class Board {
 		String toret = "";
 		for(int i = 0; i < board.length; i++) {
 			for(int j = 0; j < board[0].length; j++) {
-				toret += board[i][j] + " ";
+				toret += board[i][j].value + " ";
 			}
 			toret += "\n";
 		}
