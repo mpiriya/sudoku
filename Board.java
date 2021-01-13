@@ -155,21 +155,26 @@ public class Board {
 		if(board[row][col].getpossible() != null) {
 			int curr = 0;
 			while(curr < board[row][col].getpossible().size()) {
-				//set (row, col) to the first valid value out of the possibilities, removing the invalid and first valid one
+				//set (row, col) to the first valid value out of the possibilities
 				
 				temp.getboard()[row][col].value = board[row][col].getpossible().get(curr);
 				System.out.println("Trying to put " + temp.getboard()[row][col].value + " in (" + row + ", " + col + ")");
 
-				if(!temp.isValid()) {
-					System.out.println("\tFailed, resetting the value to 0");
-					temp.getboard()[row][col].value = 0;
-				} else if(backtracingHelper(temp, sorted, idx + 1)) {
-					System.out.println("\tSuccess");
-					return true;
+				if(temp.isValid()) {
+					if(backtracingHelper(temp, sorted, idx + 1)) {
+						return true;
+					} else {
+						System.out.println("Resetting ("  + row + ", " + col + ") back to 0");
+						temp.getboard()[row][col].value = 0;
+						// return false;
+					}
 				}
 				curr++;
-				if(curr == board[row][col].getpossible().size())
+				if(curr == board[row][col].getpossible().size()) {
+					System.out.println("resetting ("  + row + ", " + col + ") back to 0");
+					temp.getboard()[row][col].value = 0;
 					return false;
+				}
 			}
 		}
 		//returns false if no configuration of the possible values creates a valid board
