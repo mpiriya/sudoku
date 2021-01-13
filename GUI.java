@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.text.*;
+
 public class GUI implements ActionListener {
 	private int count = 0;
 	private JFrame frame;
@@ -12,6 +14,7 @@ public class GUI implements ActionListener {
 
 	public GUI() {
 		frame = new JFrame();
+		frame.setLayout(new GridLayout(0, 1));
 
 		JButton button = new JButton("Click me");
 
@@ -21,12 +24,12 @@ public class GUI implements ActionListener {
 		panel = new JPanel();
 
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
-		panel.setLayout(new GridLayout(0, 1));
+		panel.setLayout(new GridLayout(9, 9));
 
-		// panel.add(button);
-		// panel.add(label);
 
-		frame.add(new TestPane());
+
+		frame.add(new SudokuPanel());
+		frame.add(button);
 		//frame.add(panel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Sudoku");
@@ -43,9 +46,17 @@ public class GUI implements ActionListener {
 	}
 }
 
-class TestPane extends JPanel {
-	public TestPane() {
+class SudokuPanel extends JPanel {
+	private JTextField[] fields;
 
+	public SudokuPanel() {
+		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		setLayout(new GridLayout(9, 9, 2, 2));
+		fields = new JTextField[81];
+		for(JTextField j : fields) {
+			j = new JTextField();
+			this.add(j);
+		}
 	}
 
 	public Dimension getPreferredSize() {
