@@ -8,8 +8,8 @@
 
 - recursively enter values into tiles with possible values of size 1, then update the remaining empty tiles
 
-## Todo:
+- backtracing (backtracking?) algorithm to solve the rest
 
-- implement DFS tree that handles when the min possible values is greater than 1
+## Todo:
 
 - add GUI!
