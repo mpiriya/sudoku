@@ -22,6 +22,16 @@ public class Board {
 		}
 	}
 
+	public Board(Board another) {
+		this.board = new Tile[9][9];
+		for(int r = 0; r < board.length; r++) {
+			for(int c = 0; c < board[0].length; c++) {
+				this.board[r][c] = new Tile(r,c,another.board()[r][c].value);
+			}
+		}
+		
+	}
+
 	public static void main(String[] args) {
 		//initialize board, insert initial values
 		//get all possible values for every empty square
@@ -29,15 +39,15 @@ public class Board {
 		//
 
 		int[][] vals = {
-						{6, 0, 0, 4, 5, 0, 0, 9, 0},
-						{1, 0, 0, 0, 0, 0, 0, 5, 0},
-						{0, 8, 0, 1, 9, 0, 0, 7, 0},
-						{4, 7, 0, 9, 3, 0, 1, 6, 8},
-						{0, 0, 0, 6, 0, 1, 0, 0, 0},
-						{9, 6, 1, 0, 2, 8, 0, 3, 4},
-						{0, 1, 0, 0, 6, 4, 0, 8, 0},
-						{0, 3, 0, 0, 0, 0, 0, 0, 7},
-						{0, 4, 0, 0, 7, 3, 0, 0, 6}
+						{2, 0, 0, 0, 8, 0, 0, 0, 0},
+						{0, 7, 0, 9, 4, 0, 2, 0, 0},
+						{0, 0, 0, 6, 0, 5, 4, 8, 0},
+						{0, 1, 7, 5, 0, 0, 6, 0, 0},
+						{4, 9, 0, 0, 0, 0, 0, 5, 8},
+						{0, 0, 6, 0, 0, 2, 7, 9, 0},
+						{0, 6, 4, 2, 0, 8, 0, 0, 0},
+						{0, 0, 3, 0, 7, 9, 0, 4, 0},
+						{0, 0, 0, 0, 5, 0, 0, 0, 1}
 					};
 
 		Board board = new Board(vals);
@@ -52,10 +62,9 @@ public class Board {
 		while(numInserted != 0) {
 			sorted = board.sortByNumPossible();
 			numInserted = board.fill1PTiles(sorted);
-			System.out.println("HI");
 		}
-
-		System.out.println(board);
+		board.backtracing();
+		//System.out.println(board);
 	}
 
 	//get all possible values for every empty square
@@ -121,6 +130,53 @@ public class Board {
 		return count;
 	}
 
+	public boolean backtracing() {
+		Board temp = new Board(this);
+		temp.setPossibleValues();
+		Tile[] sorted = temp.sortByNumPossible();
+		for(Tile t : sorted) {
+			System.out.println(t);
+		}
+		boolean b = backtracingHelper(temp, sorted, 0);
+		System.out.println(this + "\n" + temp);
+		return b;
+	}
+
+	public boolean backtracingHelper(Board temp, Tile[] sorted, int idx) {
+		if(idx == sorted.length) {
+			System.out.println("\tReached end of list!");
+			return true;
+		}
+
+		int row = sorted[idx].row();
+		int col = sorted[idx].col();
+		
+		//if the amt of possible values exists and is greater than 1
+		if(board[row][col].getpossible() != null) {
+			int curr = 0;
+			while(curr < board[row][col].getpossible().size()) {
+				//set (row, col) to the first valid value out of the possibilities, removing the invalid and first valid one
+				
+				temp.getboard()[row][col].value = board[row][col].getpossible().get(curr);
+				System.out.println("Trying to put " + temp.getboard()[row][col].value + " in (" + row + ", " + col + ")");
+
+				if(!temp.isValid()) {
+					System.out.println("\tFailed, resetting the value to 0");
+					temp.getboard()[row][col].value = 0;
+				} else if(backtracingHelper(temp, sorted, idx + 1)) {
+					System.out.println("\tSuccess");
+					return true;
+				}
+				curr++;
+				if(curr == board[row][col].getpossible().size())
+					return false;
+			}
+		}
+		//returns false if no configuration of the possible values creates a valid board
+		return false;
+		
+	}
+
 	public ArrayList<Integer> possibleValues(int row, int col) {
 		boolean[] count = new boolean[10];
 		for(int i = 0; i < count.length; i++)
@@ -153,8 +209,8 @@ public class Board {
 				return false;
 		}
 
-		for(int i = 0; i < 3; i++) 
-			for(int j = 0; j < 3; j++)
+		for(int i = 0; i < 9; i+= 3) 
+			for(int j = 0; j < 9; j+= 3)
 				if(containsDuplicates(getBox(i,j)))
 					return false;
 
@@ -167,7 +223,7 @@ public class Board {
 		for(int i : arr) {
 			if(hs.contains(i))
 				return true;
-			else
+			else if(i != 0)
 				hs.add(i);
 		}
 
@@ -209,6 +265,25 @@ public class Board {
 		}
 
 		return toret;
+	}
+
+	// public Tile[] getBoxTiles(int row, int col) {
+	// 	Tile[] toret = new Tile[9];
+
+	// 	int count = 0;
+
+	// 	for(int i = row/3*3; i < (row/3*3) + 3; i++) {
+	// 		for(int j = col/3*3; j < (col/3*3) + 3; j++) {
+	// 			toret[count] = board[i][j];
+	// 			count++;
+	// 		}
+	// 	}
+
+	// 	return toret;
+	// }
+
+	public Tile[][] board() {
+		return board;
 	}
 
 	public String toString() {
