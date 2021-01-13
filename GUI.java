@@ -1,5 +1,4 @@
-import java.awt.GridLayout;
-import java.awt.BorderLayout;
+import java.awt.*;
 import javax.swing.*;
 
 import java.awt.event.ActionEvent;
@@ -24,10 +23,11 @@ public class GUI implements ActionListener {
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		panel.setLayout(new GridLayout(0, 1));
 
-		panel.add(button);
-		panel.add(label);
+		// panel.add(button);
+		// panel.add(label);
 
-		frame.add(panel, BorderLayout.CENTER);
+		frame.add(new TestPane());
+		//frame.add(panel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Sudoku");
 		frame.pack();
@@ -40,5 +40,43 @@ public class GUI implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		count++;
 		label.setText("Number of clicks: " + count);
+	}
+}
+
+class TestPane extends JPanel {
+	public TestPane() {
+
+	}
+
+	public Dimension getPreferredSize() {
+		return new Dimension(450,450);
+	}
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g;
+
+		int size = Math.min(getHeight() - 4, getWidth() - 4) / 9;
+		int y = (getHeight() - (size * 9)) / 2;
+		for(int h = 0; h < 9; h++) {
+			int x = (getWidth() - (size * 9)) / 2;
+			for(int v = 0; v < 9; v++) {
+				g.drawRect(x, y, size, size);
+				x += size;
+			}
+			y += size;
+		}
+		g2.setStroke(new BasicStroke(3));
+		int y2 = (getHeight() - (size * 9)) / 2;
+		for(int h = 0; h < 3; h++) {
+			int x2 = (getWidth() - (size * 9)) / 2;
+			for(int v = 0; v < 3; v++) {
+				g2.drawRect(x2, y2, size*3, size*3);
+				x2 += size*3;
+			}
+			y2 += size*3;
+		}
+
+		g2.dispose();
 	}
 }
