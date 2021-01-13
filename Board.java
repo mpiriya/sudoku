@@ -63,8 +63,8 @@ public class Board {
 			sorted = board.sortByNumPossible();
 			numInserted = board.fill1PTiles(sorted);
 		}
-		board.backtracing();
-		//System.out.println(board);
+		Board solved = board.backtracing();
+		System.out.println(solved);
 	}
 
 	//get all possible values for every empty square
@@ -130,21 +130,16 @@ public class Board {
 		return count;
 	}
 
-	public boolean backtracing() {
+	public Board backtracing() {
 		Board temp = new Board(this);
 		temp.setPossibleValues();
-		Tile[] sorted = temp.sortByNumPossible();
-		for(Tile t : sorted) {
-			System.out.println(t);
-		}
-		boolean b = backtracingHelper(temp, sorted, 0);
-		System.out.println(this + "\n" + temp);
-		return b;
+		backtracingHelper(temp, temp.sortByNumPossible(), 0);
+		return temp;
 	}
 
 	public boolean backtracingHelper(Board temp, Tile[] sorted, int idx) {
 		if(idx == sorted.length) {
-			System.out.println("\tReached end of list!");
+			// System.out.println("\tReached end of list!");
 			return true;
 		}
 
@@ -158,20 +153,20 @@ public class Board {
 				//set (row, col) to the first valid value out of the possibilities
 				
 				temp.getboard()[row][col].value = board[row][col].getpossible().get(curr);
-				System.out.println("Trying to put " + temp.getboard()[row][col].value + " in (" + row + ", " + col + ")");
+				// System.out.println("Trying to put " + temp.getboard()[row][col].value + " in (" + row + ", " + col + ")");
 
 				if(temp.isValid()) {
 					if(backtracingHelper(temp, sorted, idx + 1)) {
 						return true;
 					} else {
-						System.out.println("Resetting ("  + row + ", " + col + ") back to 0");
+						// System.out.println("Resetting ("  + row + ", " + col + ") back to 0");
 						temp.getboard()[row][col].value = 0;
 						// return false;
 					}
 				}
 				curr++;
 				if(curr == board[row][col].getpossible().size()) {
-					System.out.println("resetting ("  + row + ", " + col + ") back to 0");
+					// System.out.println("resetting ("  + row + ", " + col + ") back to 0");
 					temp.getboard()[row][col].value = 0;
 					return false;
 				}
