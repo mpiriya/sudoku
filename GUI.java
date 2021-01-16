@@ -4,8 +4,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.text.*;
-
 public class GUI implements ActionListener {
 	private JFrame frame;
 	private JPanel panel;
