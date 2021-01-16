@@ -11,7 +11,7 @@ public class GUI implements ActionListener {
 
 	public GUI() {
 		frame = new JFrame();
-		frame.setLayout(new GridLayout(0, 1));
+		frame.setLayout(new BorderLayout());
 
 		JButton button = new JButton("Solve!");
 
@@ -26,8 +26,8 @@ public class GUI implements ActionListener {
 		sudoku.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		sudoku.setLayout(new GridLayout(9, 9, 2, 2));
 
-		frame.add(sudoku);
-		frame.add(button);
+		frame.add(sudoku, BorderLayout.CENTER);
+		frame.add(button, BorderLayout.SOUTH);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Sudoku");
 		frame.pack();
