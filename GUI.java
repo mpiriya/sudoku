@@ -7,30 +7,29 @@ import java.awt.event.ActionListener;
 import javax.swing.text.*;
 
 public class GUI implements ActionListener {
-	private int count = 0;
 	private JFrame frame;
-	private JLabel label;
 	private JPanel panel;
+	private JPanel sudoku;
 
 	public GUI() {
 		frame = new JFrame();
 		frame.setLayout(new GridLayout(0, 1));
 
-		JButton button = new JButton("Click me");
+		JButton button = new JButton("Solve!");
 
 		button.addActionListener(this);
-		label = new JLabel("Number of clicks: 0");
 
 		panel = new JPanel();
 
 		panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
 		panel.setLayout(new GridLayout(9, 9));
 
+		sudoku = new SudokuPanel();
+		sudoku.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
+		sudoku.setLayout(new GridLayout(9, 9, 2, 2));
 
-
-		frame.add(new SudokuPanel());
+		frame.add(sudoku);
 		frame.add(button);
-		//frame.add(panel, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Sudoku");
 		frame.pack();
@@ -41,21 +40,42 @@ public class GUI implements ActionListener {
 	}
 	
 	public void actionPerformed(ActionEvent e) {
-		count++;
-		label.setText("Number of clicks: " + count);
+		//transfer the JTextFields into a int[][]
+		int[][] values = new int[9][9];
+		JTextField[][] strs = ((SudokuPanel) sudoku).fields();
+
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				values[i][j] = strs[i][j].getText().equals("") ? 0 : Integer.parseInt(strs[i][j].getText());
+			}
+		}
+
+		Board solved = (new Board(values)).solve();
+		int[][] solvedValues = solved.vals();
+		//pass into board constructor
+		//solve it
+		//throw the solved numbers back onto the board
+		
+		for(int i = 0; i < 9; i++) {
+			for(int j = 0; j < 9; j++) {
+				strs[i][j].setText("" + solvedValues[i][j]);
+			}
+		}
+
+		((SudokuPanel) sudoku).setFields(strs);
 	}
 }
 
 class SudokuPanel extends JPanel {
-	private JTextField[] fields;
+	private JTextField[][] fields;
 
 	public SudokuPanel() {
-		setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-		setLayout(new GridLayout(9, 9, 2, 2));
-		fields = new JTextField[81];
-		for(JTextField j : fields) {
-			j = new JTextField();
-			this.add(j);
+		fields = new JTextField[9][9];
+		for(int i = 0; i < fields.length; i++) {
+			for(int j = 0; j < fields[0].length; j++) {
+				fields[i][j] = new JTextField();
+				this.add(fields[i][j]);
+			}
 		}
 	}
 
@@ -89,5 +109,13 @@ class SudokuPanel extends JPanel {
 		}
 
 		g2.dispose();
+	}
+
+	public JTextField[][] fields(){
+		return fields;
+	}
+
+	public void setFields(JTextField[][] newfields) {
+		this.fields = newfields;
 	}
 }

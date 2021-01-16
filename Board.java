@@ -63,8 +63,25 @@ public class Board {
 			sorted = board.sortByNumPossible();
 			numInserted = board.fill1PTiles(sorted);
 		}
-		Board solved = board.backtracing();
-		System.out.println(solved);
+		board.backtracking();
+		System.out.println(board);
+	}
+
+	public Board solve() {
+		Board copy = new Board(this);
+
+		copy.setPossibleValues();
+		Tile[] sorted = copy.sortByNumPossible();
+		int numInserted = copy.fill1PTiles(sorted);
+
+		while(numInserted != 0) {
+			sorted = copy.sortByNumPossible();
+			numInserted = copy.fill1PTiles(sorted);
+		}
+
+		copy.backtracking();
+
+		return copy;
 	}
 
 	//get all possible values for every empty square
@@ -130,14 +147,12 @@ public class Board {
 		return count;
 	}
 
-	public Board backtracing() {
-		Board temp = new Board(this);
-		temp.setPossibleValues();
-		backtracingHelper(temp, temp.sortByNumPossible(), 0);
-		return temp;
+	public void backtracking() {
+		setPossibleValues();
+		backtrackingHelper(this, this.sortByNumPossible(), 0);
 	}
 
-	public boolean backtracingHelper(Board temp, Tile[] sorted, int idx) {
+	public boolean backtrackingHelper(Board temp, Tile[] sorted, int idx) {
 		if(idx == sorted.length) {
 			// System.out.println("\tReached end of list!");
 			return true;
@@ -156,7 +171,7 @@ public class Board {
 				// System.out.println("Trying to put " + temp.getboard()[row][col].value + " in (" + row + ", " + col + ")");
 
 				if(temp.isValid()) {
-					if(backtracingHelper(temp, sorted, idx + 1)) {
+					if(backtrackingHelper(temp, sorted, idx + 1)) {
 						return true;
 					} else {
 						// System.out.println("Resetting ("  + row + ", " + col + ") back to 0");
@@ -284,6 +299,17 @@ public class Board {
 
 	public Tile[][] board() {
 		return board;
+	}
+
+	public int[][] vals() {
+		int[][] toret = new int[9][9];
+		for(int i = 0; i < board.length; i++) {
+			for(int j = 0; j < board[0].length; j++) {
+				toret[i][j] = board[i][j].value;
+			}
+		}
+
+		return toret;
 	}
 
 	public String toString() {
