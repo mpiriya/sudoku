@@ -61,14 +61,18 @@ public class Board {
 		Board copy = new Board(this);
 
 		copy.setPossibleValues();
+
+		//first try the naive way of finding squares with only one possible value
 		Tile[] sorted = copy.sortByNumPossible();
 		int numInserted = copy.fill1PTiles(sorted);
 
+		//and fill the squares and update the tiles until all squares have at least 2 possible values
 		while(numInserted != 0) {
 			sorted = copy.sortByNumPossible();
 			numInserted = copy.fill1PTiles(sorted);
 		}
 
+		//use the backtracking algorithm to handle the rest
 		copy.backtracking();
 
 		return copy;
@@ -85,8 +89,9 @@ public class Board {
 		}
 	}
 
-	//flatten 2D array
+	//sorts the Tiles by amount of possible values
 	public Tile[] sortByNumPossible() {
+		//flatten 2D array
 		ArrayList<Tile> ref = new ArrayList<Tile>();
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		for(int r = 0; r < board.length; r++) {
@@ -119,6 +124,7 @@ public class Board {
 		return output;
 	}
 
+	//fills the tiles that have only one possible value, then refreshes the remaining tiles' possible values
 	public int fill1PTiles(Tile[] sorted) {
 		int count = 0;
 
@@ -137,11 +143,13 @@ public class Board {
 		return count;
 	}
 
+	//backtracking driver method
 	public void backtracking() {
 		setPossibleValues();
 		backtrackingHelper(this, this.sortByNumPossible(), 0);
 	}
 
+	//helper recursive method
 	public boolean backtrackingHelper(Board temp, Tile[] sorted, int idx) {
 		if(idx == sorted.length) {
 			return true;
@@ -155,16 +163,14 @@ public class Board {
 			int curr = 0;
 			while(curr < board[row][col].getpossible().size()) {
 				//set (row, col) to the first valid value out of the possibilities
-				
 				temp.board()[row][col].value = board[row][col].getpossible().get(curr);
 
-				if(temp.isValid()) {
-					if(backtrackingHelper(temp, sorted, idx + 1)) {
-						return true;
-					} else {
-						temp.board()[row][col].value = 0;
-					}
+				//if the board is still valid, and the recursive call of the next value returns true, then return true
+				if(temp.isValid() && backtrackingHelper(temp, sorted, idx + 1)) {
+					return true;
 				}
+
+				//if not, then move on to the next value, unless end of arr is reached in which case, set the tile to 0 and return false
 				curr++;
 				if(curr == board[row][col].getpossible().size()) {
 					temp.board()[row][col].value = 0;
