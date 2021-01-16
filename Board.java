@@ -4,15 +4,6 @@ import java.util.ArrayList;
 public class Board {
 	private Tile[][] board;
 
-	public Board() {
-		this.board = new Tile[9][9];
-		for(int r = 0; r < board.length; r++) {
-			for(int c = 0; c < board[0].length; c++) {
-				this.board[r][c] = null;
-			}
-		}
-	}
-
 	public Board(int[][] board) {
 		this.board = new Tile[9][9];
 		for(int r = 0; r < board.length; r++) {
@@ -29,7 +20,6 @@ public class Board {
 				this.board[r][c] = new Tile(r,c,another.board()[r][c].value);
 			}
 		}
-		
 	}
 
 	public static void main(String[] args) {
@@ -95,8 +85,8 @@ public class Board {
 		}
 	}
 
+	//flatten 2D array
 	public Tile[] sortByNumPossible() {
-		//flatten 2D array
 		ArrayList<Tile> ref = new ArrayList<Tile>();
 		ArrayList<Integer> sizes = new ArrayList<Integer>();
 		for(int r = 0; r < board.length; r++) {
@@ -154,7 +144,6 @@ public class Board {
 
 	public boolean backtrackingHelper(Board temp, Tile[] sorted, int idx) {
 		if(idx == sorted.length) {
-			// System.out.println("\tReached end of list!");
 			return true;
 		}
 
@@ -167,22 +156,18 @@ public class Board {
 			while(curr < board[row][col].getpossible().size()) {
 				//set (row, col) to the first valid value out of the possibilities
 				
-				temp.getboard()[row][col].value = board[row][col].getpossible().get(curr);
-				// System.out.println("Trying to put " + temp.getboard()[row][col].value + " in (" + row + ", " + col + ")");
+				temp.board()[row][col].value = board[row][col].getpossible().get(curr);
 
 				if(temp.isValid()) {
 					if(backtrackingHelper(temp, sorted, idx + 1)) {
 						return true;
 					} else {
-						// System.out.println("Resetting ("  + row + ", " + col + ") back to 0");
-						temp.getboard()[row][col].value = 0;
-						// return false;
+						temp.board()[row][col].value = 0;
 					}
 				}
 				curr++;
 				if(curr == board[row][col].getpossible().size()) {
-					// System.out.println("resetting ("  + row + ", " + col + ") back to 0");
-					temp.getboard()[row][col].value = 0;
+					temp.board()[row][col].value = 0;
 					return false;
 				}
 			}
@@ -245,10 +230,6 @@ public class Board {
 		return false;
 	}
 
-	public Tile[][] getboard() {
-		return board;
-	}
-
 	public int[] getRow(int row) {
 		int[] toret = new int[9];
 		
@@ -281,21 +262,6 @@ public class Board {
 
 		return toret;
 	}
-
-	// public Tile[] getBoxTiles(int row, int col) {
-	// 	Tile[] toret = new Tile[9];
-
-	// 	int count = 0;
-
-	// 	for(int i = row/3*3; i < (row/3*3) + 3; i++) {
-	// 		for(int j = col/3*3; j < (col/3*3) + 3; j++) {
-	// 			toret[count] = board[i][j];
-	// 			count++;
-	// 		}
-	// 	}
-
-	// 	return toret;
-	// }
 
 	public Tile[][] board() {
 		return board;
